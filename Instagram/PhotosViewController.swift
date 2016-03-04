@@ -42,7 +42,7 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
-                            NSLog("response: \(responseDictionary)")
+//                            NSLog("response: \(responseDictionary)")
                             self.media = responseDictionary["data"] as? [NSDictionary]
                             self.tableView.reloadData()
                     }
@@ -90,7 +90,9 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let data = media![section]
         let profilePhotoUrl = data["user"]!["profile_picture"] as! String
         let usernameLable = UILabel(frame: CGRect(x: 50, y: 10, width: 150, height: 30))
+        
         profileView.setImageWithURL(NSURL(string: profilePhotoUrl)!)
+        
         usernameLable.text = data["user"]!["username"] as? String
         
         headerView.addSubview(profileView)
