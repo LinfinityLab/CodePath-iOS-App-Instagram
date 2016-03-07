@@ -8,10 +8,12 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var errMsgButton: UIButton!
     
     var media: [NSDictionary]?
     
@@ -23,9 +25,27 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.dataSource = self
         tableView.delegate = self
         
-        loadFromNetwork()
+        // Initialize a UIRefreshControl
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex: 0)
+        
+        if Reachability.isConnectedToNetwork() {
+            errMsgButton.hidden = true
+            //            errMsgButton.removeFromSuperview()
+            MBProgressHUD.showHUDAddedTo(self.view, animated: true)// show loading state
+            loadFromNetwork()
+            MBProgressHUD.hideHUDForView(self.view, animated: true)// hide loading state
+        } else {
+            errMsgButton.hidden = false
+        }
+        
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
+    
+    
+
 
     func loadFromNetwork() {
         let clientId = "e05c462ebd86446ea48a5af73769b602"
@@ -89,14 +109,14 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // Use the section number to get the right URL
         let data = media![section]
         let profilePhotoUrl = data["user"]!["profile_picture"] as! String
-        let usernameLable = UILabel(frame: CGRect(x: 50, y: 10, width: 150, height: 30))
+        let usernameLabel = UILabel(frame: CGRect(x: 50, y: 10, width: 150, height: 30))
         
         profileView.setImageWithURL(NSURL(string: profilePhotoUrl)!)
         
-        usernameLable.text = data["user"]!["username"] as? String
+        usernameLabel.text = data["user"]!["username"] as? String
         
         headerView.addSubview(profileView)
-        headerView.addSubview(usernameLable)
+        headerView.addSubview(usernameLabel)
         
         return headerView
     }
@@ -105,11 +125,54 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return 50
     }
     
+    @IBAction func errMsgTap(sender: AnyObject) {
+        if Reachability.isConnectedToNetwork() {
+            errMsgButton.hidden = true
+            MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            loadFromNetwork()
+            MBProgressHUD.hideHUDForView(self.view, animated: true)
+        } else {
+            errMsgButton.hidden = false
+        }
+    }
+    
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+        
+        if Reachability.isConnectedToNetwork() {
+            errMsgButton.hidden = true
+        } else {
+            errMsgButton.hidden = false
+            refreshControl.endRefreshing()
+        }
+        
+        loadFromNetwork()
+        refreshControl.endRefreshing()
+        
+    }
     
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    internal class Reachability {
+        class func isConnectedToNetwork() -> Bool {
+            var zeroAddress = sockaddr_in()
+            zeroAddress.sin_len = UInt8(sizeofValue(zeroAddress))
+            zeroAddress.sin_family = sa_family_t(AF_INET)
+            let defaultRouteReachability = withUnsafePointer(&zeroAddress) {
+                SCNetworkReachabilityCreateWithAddress(nil, UnsafePointer($0))
+            }
+            var flags = SCNetworkReachabilityFlags()
+            if !SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) {
+                return false
+            }
+            let isReachable = (flags.rawValue & UInt32(kSCNetworkFlagsReachable)) != 0
+            let needsConnection = (flags.rawValue & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
+            return (isReachable && !needsConnection)
+        }
     }
 
 }
