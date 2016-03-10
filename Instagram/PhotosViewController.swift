@@ -25,19 +25,23 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.dataSource = self
         tableView.delegate = self
         
+        //tableView.addSubview(errMsgButton)
+        tableView.bringSubviewToFront(errMsgButton)
+        
         // Initialize a UIRefreshControl
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
         
         if Reachability.isConnectedToNetwork() {
-            errMsgButton.hidden = true
-            //            errMsgButton.removeFromSuperview()
+            
+            dismissNetworkErr()
+            
             MBProgressHUD.showHUDAddedTo(self.view, animated: true)// show loading state
             loadFromNetwork()
             MBProgressHUD.hideHUDForView(self.view, animated: true)// hide loading state
         } else {
-            errMsgButton.hidden = false
+            showNetworkErr()
         }
         
         
@@ -127,27 +131,37 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @IBAction func errMsgTap(sender: AnyObject) {
         if Reachability.isConnectedToNetwork() {
-            errMsgButton.hidden = true
+            dismissNetworkErr()
             MBProgressHUD.showHUDAddedTo(self.view, animated: true)
             loadFromNetwork()
             MBProgressHUD.hideHUDForView(self.view, animated: true)
         } else {
-            errMsgButton.hidden = false
+            showNetworkErr()
         }
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
         
         if Reachability.isConnectedToNetwork() {
-            errMsgButton.hidden = true
+            dismissNetworkErr()
         } else {
-            errMsgButton.hidden = false
+            showNetworkErr()
             refreshControl.endRefreshing()
         }
         
         loadFromNetwork()
         refreshControl.endRefreshing()
         
+    }
+    
+    func showNetworkErr(){
+        self.tableView.frame = CGRectMake(0, 42, 414, 716)
+        self.errMsgButton.hidden = false
+    }
+    
+    func dismissNetworkErr(){
+        self.tableView.frame = CGRectMake(0, 20, 414, 716)
+        self.errMsgButton.hidden = true
     }
     
     
