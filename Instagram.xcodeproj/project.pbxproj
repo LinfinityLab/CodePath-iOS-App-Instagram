@@ -13,6 +13,7 @@
 		A49E17D01C88CBB300446A50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A49E17CF1C88CBB300446A50 /* Assets.xcassets */; };
 		A49E17D31C88CBB300446A50 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A49E17D11C88CBB300446A50 /* LaunchScreen.storyboard */; };
 		A49E17DD1C88D0C100446A50 /* InstagramCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49E17DC1C88D0C100446A50 /* InstagramCell.swift */; };
+		A4E0D1091C963AFA00E6CBE6 /* PhotoDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E0D1081C963AFA00E6CBE6 /* PhotoDetailsViewController.swift */; };
 		B591679992458C787C7AC93D /* Pods_Instagram.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 319B88D1696D4C85C4E379AB /* Pods_Instagram.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		A49E17D21C88CBB300446A50 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A49E17D41C88CBB300446A50 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A49E17DC1C88D0C100446A50 /* InstagramCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstagramCell.swift; sourceTree = "<group>"; };
+		A4E0D1081C963AFA00E6CBE6 /* PhotoDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoDetailsViewController.swift; sourceTree = "<group>"; };
 		FDC671357FF954A0FBECECB1 /* Pods-Instagram.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Instagram/Pods-Instagram.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -65,6 +67,7 @@
 			children = (
 				A49E17C81C88CBB300446A50 /* AppDelegate.swift */,
 				A49E17CA1C88CBB300446A50 /* PhotosViewController.swift */,
+				A4E0D1081C963AFA00E6CBE6 /* PhotoDetailsViewController.swift */,
 				A49E17CC1C88CBB300446A50 /* Main.storyboard */,
 				A49E17CF1C88CBB300446A50 /* Assets.xcassets */,
 				A49E17D11C88CBB300446A50 /* LaunchScreen.storyboard */,
@@ -214,6 +217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4E0D1091C963AFA00E6CBE6 /* PhotoDetailsViewController.swift in Sources */,
 				A49E17CB1C88CBB300446A50 /* PhotosViewController.swift in Sources */,
 				A49E17C91C88CBB300446A50 /* AppDelegate.swift in Sources */,
 				A49E17DD1C88D0C100446A50 /* InstagramCell.swift in Sources */,

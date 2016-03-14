@@ -15,11 +15,13 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var errMsgButton: UIButton!
     
-    var media: [NSDictionary]?
+    var media : [NSDictionary]?
+    var select = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.frame = CGRectMake(0, 60, 414, 716)
         tableView.rowHeight = 320
         
         tableView.dataSource = self
@@ -155,12 +157,12 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func showNetworkErr(){
-        self.tableView.frame = CGRectMake(0, 42, 414, 716)
+        self.tableView.frame = CGRectMake(0, 82, 414, 716)
         self.errMsgButton.hidden = false
     }
     
     func dismissNetworkErr(){
-        self.tableView.frame = CGRectMake(0, 20, 414, 716)
+        self.tableView.frame = CGRectMake(0, 60, 414, 716)
         self.errMsgButton.hidden = true
     }
     
@@ -187,6 +189,24 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let needsConnection = (flags.rawValue & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
             return (isReachable && !needsConnection)
         }
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        select = media![indexPath.row]["images"]!["standard_resolution"]!!["url"] as! String
+    }
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let vc = segue.destinationViewController as! PhotoDetailsViewController
+        
+        let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+        
+        let selected = media![indexPath!.row]["images"]!["standard_resolution"]!!["url"] as! String
+        
+        vc.photoUrl = selected
+        
+        
     }
 
 }
